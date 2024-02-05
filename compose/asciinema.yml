@@ -13,7 +13,7 @@ services:
       - SMTP_PORT=587
       - SMTP_USERNAME=xxxx@gmail.com
 #####Application google password below
-      - SMTP_PASSWORD=XXXXXXXXXXXXX msrr rdhd nida
+      - SMTP_PASSWORD=XXXXXXXXXXXXX
     volumes:
       - asciinema_data:/var/opt/asciinema
     depends_on:
