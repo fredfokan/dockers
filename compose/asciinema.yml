@@ -1,0 +1,51 @@
+services:
+  asciinema:
+    image: ghcr.io/asciinema/asciinema-server:20231217
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    environment:
+      - SECRET_KEY_BASE=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      - URL_HOST=asciinema.myserver.ch
+      - URL_SCHEME=https
+      - URL_PORT=443
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=xxxx@gmail.com
+#####Application google password below
+      - SMTP_PASSWORD=XXXXXXXXXXXXX msrr rdhd nida
+    volumes:
+      - asciinema_data:/var/opt/asciinema
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: docker.io/library/postgres:14
+    restart: unless-stopped
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+#  caddy:
+#    image: caddy:2
+#    command: caddy reverse-proxy --from https://asciinema.myserver.ch --to http://asciinema:4000
+#    ports:
+#      - '80:80'
+#      - '8443:443'
+#      - '8443:443/udp'
+#    volumes:
+#      - caddy_data:/data
+#      - caddy_config:/config
+
+volumes:
+  asciinema_data:
+  postgres_data:
+  caddy_data:
+  caddy_config:
